@@ -398,7 +398,7 @@ Ecrire une règle qui alerte à chaque fois que votre système reçoit un ping d
 ---
 
 
-**Question 11: Où le message a-t-il été journalisé ? **
+**Question 11: Où le message a-t-il été journalisé ?**
 
 ---
 
@@ -407,7 +407,7 @@ Ecrire une règle qui alerte à chaque fois que votre système reçoit un ping d
 ---
 
 
-**Question 12: Qu'est-ce qui a été journalisé ? **
+**Question 12: Qu'est-ce qui a été journalisé ?**
 
 ---
 
@@ -518,7 +518,7 @@ Faire des recherches à propos des outils `fragroute` et `fragtest`.
 ---
 
 
-Reprendre l'exercice de la partie [Trouver votre nom](#trouver-votre-nom). Essayer d'offusquer la détection avec `fragroute`.
+Reprendre l'exercice de la partie [Trouver votre nom](#trouver-votre-nom-). Essayer d'offusquer la détection avec `fragroute`.
 
 
 **Question 23: Quel est le résultat de votre tentative ?**
