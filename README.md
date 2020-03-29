@@ -10,21 +10,21 @@ Clonez le repo sur votre machine. Vous pouvez répondre aux questions en modifia
 
 ## Table de matières
 
-[Introduction](https://github.com/arubinst/Teaching-HEIGVD-SRX-2019-Laboratoire-IDS#introduction)
+[Introduction](#introduction)
 
-[Echéance](https://github.com/arubinst/Teaching-HEIGVD-SRX-2019-Laboratoire-IDS#echéance)
+[Echéance](#echéance)
 
-[Configuration du réseau](https://github.com/arubinst/Teaching-HEIGVD-SRX-2019-Laboratoire-IDS#configuration-du-réseau-sur-virtualbox)
+[Configuration du réseau](#configuration-du-réseau-sur-virtualbox)
 
-[Installation de Snort](https://github.com/arubinst/Teaching-HEIGVD-SRX-2019-Laboratoire-IDS#installation-de-snort-sur-linux)
+[Installation de Snort](#installation-de-snort-sur-linux)
 
-[Essayer Snort](https://github.com/arubinst/Teaching-HEIGVD-SRX-2019-Laboratoire-IDS#essayer-snort)
+[Essayer Snort](#essayer-snort)
 
-[Utilisation comme IDS](https://github.com/arubinst/Teaching-HEIGVD-SRX-2019-Laboratoire-IDS#utilisation-comme-un-ids)
+[Utilisation comme IDS](#utilisation-comme-un-ids)
 
-[Ecriture de règles](https://github.com/arubinst/Teaching-HEIGVD-SRX-2019-Laboratoire-IDS#ecriture-de-règles)
+[Ecriture de règles](#ecriture-de-règles)
 
-[Travail à effectuer](https://github.com/arubinst/Teaching-HEIGVD-SRX-2019-Laboratoire-IDS#exercises)
+[Travail à effectuer](#exercises)
 
 
 ## Echéance 
@@ -100,7 +100,7 @@ snort -v -i eth0
 
 Snort s'execute donc et montre sur l'écran tous les entêtes des paquets IP qui traversent l'interface eth0. Cette interface est connectée à l'interface réseau de votre machine hôte à travers le bridge de VirtualBox.
 
-Pour arrêter Snort, il suffit d'utiliser `CTRL-C`.
+Pour arrêter Snort, il suffit d'utiliser `CTRL-C` (**attention** : il peut arriver de temps à autres que snort ne réponde pas correctement au signal d'arrêt. Dans ce cas-là, il faudra utiliser `kill` pour arrêter le process).
 
 ## Utilisation comme un IDS
 
@@ -298,6 +298,7 @@ Vous pouvez aussi utiliser des captures Wireshark ou des fichiers snort.log.xxxx
 
 ---
 
+--
 
 ### Trouver votre nom :
 
@@ -319,7 +320,7 @@ Utiliser un éditeur et créer un fichier `myrules.rules` sur votre répertoire 
 sudo snort -c myrules.rules -i eth0
 ```
 
-**Question 4: Que voyez-vous quand le logiciel est lancé ? Qu'est-ce que ça vaut dire ?**
+**Question 4: Que voyez-vous quand le logiciel est lancé ? Qu'est-ce que tous les messages affichés veulent dire ?**
 
 ---
 
@@ -327,9 +328,9 @@ sudo snort -c myrules.rules -i eth0
 
 ---
 
-Aller à un site web contenant votre nom ou votre mot clé que vous avez choisi dans son text (il faudra chercher un peu pour trouver un site en http...). Ensuite, arrêter Snort avec `CTRL-C`.
+Aller à un site web contenant dans son text votre nom ou votre mot clé que vous avez choisi (il faudra chercher un peu pour trouver un site en http...).
 
-**Question 5: Que voyez-vous ?**
+**Question 5: Que voyez-vous sur votre terminal quand vous visitez le site ?**
 
 ---
 
@@ -337,9 +338,20 @@ Aller à un site web contenant votre nom ou votre mot clé que vous avez choisi 
 
 ---
 
-Aller au répertoire /var/log/snort. Ouvrir le fichier `alert`. Vérifier qu'il y ait des alertes pour votre nom.
+Arrêter Snort avec `CTRL-C`.
 
-**Question 6: A quoi ressemble l'alerte ? Qu'est-ce que chaque champ veut dire ?**
+**Question 6: Que voyez-vous quand vous arrêtez snort ? Décrivez en détail toutes les informations qu'il vous fournit.**
+
+---
+
+**Reponse :**  
+
+---
+
+
+Aller au répertoire /var/log/snort. Ouvrir le fichier `alert`. Vérifier qu'il y ait des alertes pour votre nom ou mot choisi.
+
+**Question 7: A quoi ressemble l'alerte ? Qu'est-ce que chaque élément de l'alerte veut dire ? Décrivez-la en détail !**
 
 ---
 
@@ -354,7 +366,7 @@ Aller au répertoire /var/log/snort. Ouvrir le fichier `alert`. Vérifier qu'il 
 
 Ecrire une règle qui journalise (sans alerter) un message à chaque fois que Wikipedia est visité **DEPUIS VOTRE** station. **Ne pas utiliser une règle qui détecte un string ou du contenu**.
 
-**Question 7: Quelle est votre règle ? Où le message a-t'il été journalisé ? Qu'est-ce qui a été journalisé ?**
+**Question 8: Quelle est votre règle ? Où le message a-t'il été journalisé ? Qu'est-ce qui a été journalisé ?**
 
 ---
 
@@ -366,9 +378,36 @@ Ecrire une règle qui journalise (sans alerter) un message à chaque fois que Wi
 
 ### Detecter un ping d'un autre système
 
-Ecrire une règle qui alerte à chaque fois que votre système reçoit un ping depuis une autre machine. Assurez-vous que **ça n'alerte pas** quand c'est vous qui envoyez le ping vers un autre système !
+Ecrire une règle qui alerte à chaque fois que votre système reçoit un ping depuis une autre machine (je sais que la situation actuelle du Covid-19 ne vous permet pas de vous mettre ensemble... utilisez votre imagination pour trouver la solution à cette question !). Assurez-vous que **ça n'alerte pas** quand c'est vous qui envoyez le ping vers un autre système !
 
-**Question 8: Quelle est votre règle ? Comment avez-vous fait pour que ça identifie seulement les pings entrants ? Où le message a-t'il été journalisé ? Qu'est-ce qui a été journalisé ?**
+**Question 9: Quelle est votre règle ?**
+
+---
+
+**Reponse :**  
+
+---
+
+
+**Question 10: Comment avez-vous fait pour que ça identifie seulement les pings entrants ?**
+
+---
+
+**Reponse :**  
+
+---
+
+
+**Question 11: Où le message a-t-il été journalisé ? **
+
+---
+
+**Reponse :**  
+
+---
+
+
+**Question 12: Qu'est-ce qui a été journalisé ? **
 
 ---
 
@@ -382,7 +421,7 @@ Ecrire une règle qui alerte à chaque fois que votre système reçoit un ping d
 
 Modifier votre règle pour que les pings soient détectés dans les deux sens.
 
-**Question 9: Qu'est-ce que vous avez modifié pour que la règle détecte maintenant le trafic dans les deux senses ?**
+**Question 13: Qu'est-ce que vous avez modifié pour que la règle détecte maintenant le trafic dans les deux senses ?**
 
 ---
 
@@ -395,9 +434,18 @@ Modifier votre règle pour que les pings soient détectés dans les deux sens.
 
 ### Detecter une tentative de login SSH
 
-Essayer d'écrire une règle qui Alerte qu'une tentative de session SSH a été faite depuis la machine d'un voisin. Si vous avez besoin de plus d'information sur ce qui décrit cette tentative (adresses, ports, protocoles), servez-vous de Wireshark pour analyser les échanges lors de la requête de connexion depuis votre voisi.
+Essayer d'écrire une règle qui Alerte qu'une tentative de session SSH a été faite depuis la machine d'un voisin (je sais que la situation actuelle du Covid-19 ne vous permet pas de vous mettre ensemble... utilisez votre imagination pour trouver la solution à cette question !). Si vous avez besoin de plus d'information sur ce qui décrit cette tentative (adresses, ports, protocoles), servez-vous de Wireshark pour analyser les échanges lors de la requête de connexion depuis votre voisi.
 
-**Question 10: Quelle est votre règle ? Montrer la règle et expliquer comment elle fonctionne. Montre le message d'alerte enregistré dans le fichier d'alertes.**
+**Question 14: Quelle est votre règle ? Montrer la règle et expliquer en détail comment elle fonctionne.**
+
+---
+
+**Reponse :**  
+
+---
+
+
+**Question 15: Montrer le message d'alerte enregistré dans le fichier d'alertes.** 
 
 ---
 
@@ -411,7 +459,7 @@ Essayer d'écrire une règle qui Alerte qu'une tentative de session SSH a été 
 
 Lancer Wireshark et faire une capture du trafic sur l'interface connectée au bridge. Générez du trafic avec votre machine hôte qui corresponde à l'une des règles que vous avez ajouté à votre fichier de configuration personnel. Arrêtez la capture et enregistrez-la dans un fichier.
 
-**Question 11: Quelle est l'option de Snort qui permet d'analyser un fichier pcap ou un fichier log ?**
+**Question 16: Quelle est l'option de Snort qui permet d'analyser un fichier pcap ou un fichier log ?**
 
 ---
 
@@ -421,12 +469,106 @@ Lancer Wireshark et faire une capture du trafic sur l'interface connectée au br
 
 Utiliser l'option correcte de Snort pour analyser le fichier de capture Wireshark.
 
-**Question 12: Quelle est le comportement de Snort avec un fichier de capture ? Y-a-t'il une difference par rapport à l'analyse en temps réel ? Est-ce que des alertes sont aussi enregistrées dans le fichier d'alertes?**
+**Question 17: Quelle est le comportement de Snort avec un fichier de capture ? Y-a-t'il une difference par rapport à l'analyse en temps réel ?**
 
 ---
 
 **Reponse :**  
 
 ---
+
+**Question 18: Est-ce que des alertes sont aussi enregistrées dans le fichier d'alertes?**
+
+---
+
+**Reponse :**  
+
+---
+
+--
+
+### Contournement de la détection
+
+Faire des recherches à propos des outils `fragroute` et `fragtest`.
+
+**Question 20: A quoi servent ces deux outils ?**
+
+---
+
+**Reponse :**  
+
+---
+
+
+**Question 21: Quel est le principe de fonctionnement ?**
+
+---
+
+**Reponse :**  
+
+---
+
+
+**Question 22: Qu'est-ce que le `Frag3 Preprocessor` ? A quoi ça sert et comment ça fonctionne ?**
+
+---
+
+**Reponse :**  
+
+---
+
+
+Reprendre l'exercice de la partie [Trouver votre nom](#trouver-votre-nom). Essayer d'offusquer la détection avec `fragroute`.
+
+
+**Question 23: Quel est le résultat de votre tentative ?**
+
+---
+
+**Reponse :**  
+
+---
+
+
+Modifier le fichier `myrules.rules` pour que snort utiliser le `Frag3 Preprocessor` et refaire la tentative.
+
+
+**Question 24: Quel est le résultat ?**
+
+---
+
+**Reponse :**  
+
+---
+
+
+**Question 25: A quoi sert le `SSL/TLS Preprocessor` ?**
+
+---
+
+**Reponse :**  
+
+---
+
+
+**Question 26: A quoi sert le `Sensitive Data Preprocessor` ?**
+
+---
+
+**Reponse :**  
+
+---
+
+### Conclusions
+
+
+**Question 27: Donnez-nous vos conclusions et votre opinion à propos de snort**
+
+---
+
+**Reponse :**  
+
+---
+
 
 <sub>This guide draws heavily on http://cs.mvnu.edu/twiki/bin/view/Main/CisLab82014</sub>
