@@ -27,26 +27,26 @@ Clonez le repo sur votre machine. Vous pouvez répondre aux questions en modifia
 [Travail à effectuer](#exercises)
 
 
-## Echéance 
+## Échéance 
 
 Ce travail devra être rendu le dimanche après la fin de la 2ème séance de laboratoire, soit au plus tard, **le 6 avril 2020, à 23h59.**
 
 
 ## Introduction
 
-Dans ce travail de laboratoire, vous allez explorer un système de detection contre les intrusions (IDS) dont l'utilisation es très répandue grace au fait qu'il est gratuit et open source. Il s'appelle [Snort](https://www.snort.org). Il existe des versions de Snort pour Linux et pour Windows.
+Dans ce travail de laboratoire, vous allez explorer un système de détection contre les intrusions (IDS) dont l'utilisation es très répandue grâce au fait qu'il est gratuit et open source. Il s'appelle [Snort](https://www.snort.org). Il existe des versions de Snort pour Linux et pour Windows.
 
-### Les systèmes de detection d'intrusion
+### Les systèmes de détection d'intrusion
 
-Un IDS peut "écouter" tout le traffic de la partie du réseau où il est installé. Sur la base d'une liste de règles, il déclenche des actions sur des paquets qui correspondent à la description de la règle.
+Un IDS peut "écouter" tout le trafic de la partie du réseau où il est installé. Sur la base d'une liste de règles, il déclenche des actions sur des paquets qui correspondent à la description de la règle.
 
-Un exemple de règle pourrait être, en language commun : "donner une alerte pour tous les paquets envoyés par le port http à un serveur web dans le réseau, qui contiennent le string 'cmd.exe'". En on peut trouver des règles très similaires dans les règles par défaut de Snort. Elles permettent de détecter, par exemple, si un attaquant essaie d'executer un shell de commandes sur un serveur Web tournant sur Windows. On verra plus tard à quoi ressemblent ces règles.
+Un exemple de règle pourrait être, en langage commun : "donner une alerte pour tous les paquets envoyés par le port http à un serveur web dans le réseau, qui contiennent le string 'cmd.exe'". En on peut trouver des règles très similaires dans les règles par défaut de Snort. Elles permettent de détecter, par exemple, si un attaquant essaie exécuter un shell de commandes sur un serveur Web tournant sur Windows. On verra plus tard à quoi ressemblent ces règles.
 
 Snort est un IDS très puissant. Il est gratuit pour l'utilisation personnelle et en entreprise, où il est très utilisé aussi pour la simple raison qu'il est l'un des plus efficaces systèmes IDS.
 
 Snort peut être exécuté comme un logiciel indépendant sur une machine ou comme un service qui tourne après chaque démarrage. Si vous voulez qu'il protège votre réseau, fonctionnant comme un IPS, il faudra l'installer "in-line" avec votre connexion Internet. 
 
-Par exemple, pour une petite entreprise avec un accès Internet avec un modem simple et un switch interconnectant une dizaine d'ordinateurs de bureau, il faudra utiliser une nouvelle machine executant Snort et placée entre le modem et le switch. 
+Par exemple, pour une petite entreprise avec un accès Internet avec un modem simple et un switch interconnectant une dizaine d'ordinateurs de bureau, il faudra utiliser une nouvelle machine exécutant Snort et placée entre le modem et le switch. 
 
 
 ## Matériel
@@ -98,35 +98,35 @@ snort -v -i eth0
 
 **ATTENTION : assurez-vous de bien choisir l'interface qui se trouve en mode bridge/promiscuous. Elle n'est peut-être pas eth0 chez-vous!**
 
-Snort s'execute donc et montre sur l'écran tous les entêtes des paquets IP qui traversent l'interface eth0. Cette interface est connectée à l'interface réseau de votre machine hôte à travers le bridge de VirtualBox.
+Snort exécute donc et montre sur l'écran tous les entêtes des paquets IP qui traversent l'interface eth0. Cette interface est connectée à l'interface réseau de votre machine hôte à travers le bridge de VirtualBox.
 
 Pour arrêter Snort, il suffit d'utiliser `CTRL-C` (**attention** : il peut arriver de temps à autres que snort ne réponde pas correctement au signal d'arrêt. Dans ce cas-là, il faudra utiliser `kill` pour arrêter le process).
 
 ## Utilisation comme un IDS
 
-Pour enregistrer seulement les alertes et pas tout le trafic, on execute Snort en mode IDS. Il faudra donc spécifier un fichier contenant des règles. 
+Pour enregistrer seulement les alertes et pas tout le trafic, on exécute Snort en mode IDS. Il faudra donc spécifier un fichier contenant des règles. 
 
 Il faut noter que `/etc/snort/snort.config` contient déjà des références aux fichiers de règles disponibles avec l'installation par défaut. Si on veut tester Snort avec des règles simples, on peut créer un fichier de config personnalisé (par exemple `mysnort.conf`) et importer un seul fichier de règles utilisant la directive "include".
 
-Les fichiers de règles sont normalement stockes dans le repertoire `/etc/snort/rules/`, mais en fait un fichier de config et les fichiers de règles peuvent se trouver dans n'importe quel repertoire. 
+Les fichiers de règles sont normalement stockes dans le répertoire `/etc/snort/rules/`, mais en fait un fichier de config et les fichiers de règles peuvent se trouver dans n'importe quel répertoire. 
 
-Par exemple, créez un fichier de config `mysnort.conf` dans le repertoire `/etc/snort` avec le contenu suivant :
+Par exemple, créez un fichier de config `mysnort.conf` dans le répertoire `/etc/snort` avec le contenu suivant :
 
 ```
 include /etc/snort/rules/icmp2.rules
 ```
 
-Ensuite, créez le fichier de règles `icmp2.rules` dans le repertoire `/etc/snort/rules/` et rajoutez dans ce fichier le contenu suivant :
+Ensuite, créez le fichier de règles `icmp2.rules` dans le répertoire `/etc/snort/rules/` et rajoutez dans ce fichier le contenu suivant :
 
 `alert icmp any any -> any any (msg:"ICMP Packet"; sid:4000001; rev:3;)`
 
-On peut maintenant executer la commande :
+On peut maintenant exécuter la commande :
 
 ```
 snort -c /etc/snort/mysnort.conf
 ```
 
-Vous pouvez maintenant faire quelques pings depuis votre hôte et regarder les résultas dans le fichier d'alertes contenu dans le repertoire `/var/log/snort/`. 
+Vous pouvez maintenant faire quelques pings depuis votre hôte et regarder les résultats dans le fichier d'alertes contenu dans le répertoire `/var/log/snort/`. 
 
 
 ## Ecriture de règles
@@ -152,7 +152,7 @@ Cette règle décrit une alerte générée quand Snort trouve un paquet avec tou
 * Emis depuis n'importe quelle adresse et depuis n'importe quel port
 * A destination du réseau identifié par l'adresse 192.168.1.0/24 sur le port 111
 
-Le text jusqu'au premier parenthèse est l'entête de la règle. 
+Le texte jusqu'à la première parenthèse est l'en-tête de la règle. 
 
 ```
 alert tcp any any -> 192.168.1.0/24 111
@@ -183,7 +183,7 @@ Les éléments dans les options d'une règle sont traitées comme un AND logique
 alert tcp any any -> any any (msg:"My Name!"; content:"Skon"; sid:1000001; rev:1;)
 ```
 
-L'entête contient l'information qui décrit le "qui", le "où" et le "quoi" du paquet. Ça décrit aussi ce qui doit arriver quand un paquet correspond à tous les contenus dans la règle.
+L'en-tête contient l'information qui décrit le "qui", le "où" et le "quoi" du paquet. Ça décrit aussi ce qui doit arriver quand un paquet correspond à tous les contenus dans la règle.
 
 Le premier champ dans le règle c'est l'action. L'action dit à Snort ce qui doit être fait quand il trouve un paquet qui correspond à la règle. Il y a six actions :
 
@@ -222,7 +222,7 @@ Les plages de ports utilisent l'opérateur `:`, qui peut être utilisé de diff�
 log udp any any -> 192.168.1.0/24 1:1024
 ```
 
-Journaliser le traffic UDP venant d'un port compris entre 1 et 1024.
+Journaliser le trafic UDP venant d'un port compris entre 1 et 1024.
 
 --
 
@@ -230,7 +230,7 @@ Journaliser le traffic UDP venant d'un port compris entre 1 et 1024.
 log tcp any any -> 192.168.1.0/24 :6000
 ```
 
-Journaliser le traffic TCP venant d'un port plus bas ou égal à 6000.
+Journaliser le trafic TCP venant d'un port plus bas ou égal à 6000.
 
 --
 
@@ -238,7 +238,7 @@ Journaliser le traffic TCP venant d'un port plus bas ou égal à 6000.
 log tcp any :1024 -> 192.168.1.0/24 500:
 ```
 
-Journaliser le traffic TCP venant d'un port privilégié (bien connu) plus grand ou égal à 500 mais jusqu'au port 1024.
+Journaliser le trafic TCP venant d'un port privilégié (bien connu) plus grand ou égal à 500 mais jusqu'au port 1024.
 
 
 ### Opérateur de direction
@@ -253,11 +253,11 @@ log 192.168.1.0/24 any <> 192.168.1.0/24 23
 
 ## Alertes et logs Snort
 
-Si Snort détecte un paquet qui correspond à une règle, il envoie un message d'alerte ou il journalise le message. Les alertes peuvent être envoyées au syslog, journalisées dans un fichier text d'alertes ou affichées directement à l'écran.
+Si Snort détecte un paquet qui correspond à une règle, il envoie un message d'alerte ou il journalise le message. Les alertes peuvent être envoyées au syslog, journalisées dans un fichier texte d'alertes ou affichées directement à l'écran.
 
-Le système envoie **les alertes vers le syslog** et il peut en option envoyer **les paquets "offensifs" vers une structure de repertoires**.
+Le système envoie **les alertes vers le syslog** et il peut en option envoyer **les paquets "offensifs" vers une structure de répertoires.
 
-Les alertes sont journalisées via syslog dans le fichier `/var/log/snort/alerts`. Toute alerte se trouvant dans ce fichier aura son paquet correspondant dans le même repertoire, mais sous le fichier `snort.log.xxxxxxxxxx` où `xxxxxxxxxx` est l'heure Unix du commencement du journal.
+Les alertes sont journalisées via syslog dans le fichier `/var/log/snort/alerts`. Toute alerte se trouvant dans ce fichier aura son paquet correspondant dans le même répertoire, mais sous le fichier `snort.log.xxxxxxxxxx` où `xxxxxxxxxx` est l'heure Unix du commencement du journal.
 
 Avec la règle suivante :
 
@@ -274,9 +274,9 @@ Les fichiers log sont des fichiers binaires enregistrés en format pcap. Vous po
 tcpdump -r /var/log/snort/snort.log.xxxxxxxxxx
 ```
 
-Vous pouvez aussi utiliser des captures Wireshark ou des fichiers snort.log.xxxxxxxxx comme source d'analyse por Snort.
+Vous pouvez aussi utiliser des captures Wireshark ou des fichiers snort.log.xxxxxxxxx comme source d'analyse pour Snort.
 
-## Exercises
+## Exercices
 
 **Réaliser des captures d'écran des exercices suivants et les ajouter à vos réponses.**
 
@@ -286,7 +286,7 @@ Vous pouvez aussi utiliser des captures Wireshark ou des fichiers snort.log.xxxx
 
 ---
 
-**Reponse :**  
+**Réponse :**  Sont l'équivalent de "plug-ins" permettant de configurer Snort comme IDS.
 
 ---
 
@@ -294,7 +294,8 @@ Vous pouvez aussi utiliser des captures Wireshark ou des fichiers snort.log.xxxx
 
 ---
 
-**Reponse :**  
+**Réponse :**  Car lorsque nous créons un fichier "home-made", nous n'ajoutons pas forcément des "plug-ins", donc *Snort* essaie d'un chargé un (mais n'en trouve pas vu qu'aucun plugin est chargé). 
+A noter que cela est uniquement un _Warning_.
 
 ---
 
@@ -310,7 +311,9 @@ alert tcp any any -> any any (msg:"Mon nom!"; content:"Rubinstein"; sid:4000015;
 
 ---
 
-**Reponse :**  
+**Réponse :**  Alerte lorsqu'un paquet de type _TCP_ contenant le mot "Rubinstein" est envoyé depuis n'importe quelle source / destination (ainsi que n'importe quel port).
+
+Lorsque l'alerte est levée, le titre de cette dernière est "Mon nom!" + l'identifiant unique (*sid:4000015* et *rev:1*) 
 
 ---
 
@@ -324,7 +327,9 @@ sudo snort -c myrules.rules -i eth0
 
 ---
 
-**Reponse :**  
+**Réponse :**  Le programme n'affiche uniquement des warnings car lorsqu'une exception est levée est n'est pas affiché en console mais est elle uniquement et directement logué dans le fichier  `/var/log/snort/alert`
+
+![q4-warning](images/q4-warning.PNG)
 
 ---
 
@@ -334,7 +339,7 @@ Aller à un site web contenant dans son text votre nom ou votre mot clé que vou
 
 ---
 
-**Reponse :**  
+**Réponse :**  Uniquement les différents WARNING s'affichant à chaque fois qu'une alerte est levée.
 
 ---
 
@@ -344,7 +349,11 @@ Arrêter Snort avec `CTRL-C`.
 
 ---
 
-**Reponse :**  
+**Réponse :**  
+
+Les alertes détectées sur le site http://www.hobby-centre.ch (correspondant à des requêtes contenant le mot "hobby").
+
+![q6-stateAlert](images/q6-stateAlert.PNG)
 
 ---
 
@@ -355,14 +364,23 @@ Aller au répertoire /var/log/snort. Ouvrir le fichier `alert`. Vérifier qu'il 
 
 ---
 
-**Reponse :**  
+**Réponse :**  
+
+1ère ligne : Identification de l'alerte lancée.
+
+2ème ligne : Priorité de l'alerte (définissable dans la règle) mais qui par défaut vaut 0.
+
+3ème ligne : Informations de la requête (Adresse IP, Port)
+
+4 / 5 ème lignes : Informations sur le paquet IP transmis.
+
+![q7-alertfile](images/q7-alertfile.PNG)
 
 ---
 
-
 --
 
-### Detecter une visite à Wikipedia
+### Détecter une visite à Wikipedia
 
 Ecrire une règle qui journalise (sans alerter) un message à chaque fois que Wikipedia est visité **DEPUIS VOTRE** station. **Ne pas utiliser une règle qui détecte un string ou du contenu**.
 
@@ -569,6 +587,5 @@ Modifier le fichier `myrules.rules` pour que snort utiliser le `Frag3 Preprocess
 **Reponse :**  
 
 ---
-
 
 <sub>This guide draws heavily on http://cs.mvnu.edu/twiki/bin/view/Main/CisLab82014</sub>
