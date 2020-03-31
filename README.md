@@ -380,21 +380,29 @@ Aller au répertoire /var/log/snort. Ouvrir le fichier `alert`. Vérifier qu'il 
 
 --
 
-### Détecter une visite à Wikipedia
+### Détecter une visite à Wikipédia
 
-Ecrire une règle qui journalise (sans alerter) un message à chaque fois que Wikipedia est visité **DEPUIS VOTRE** station. **Ne pas utiliser une règle qui détecte un string ou du contenu**.
+Ecrire une règle qui journalise (sans alerter) un message à chaque fois que Wikipédia est visité **DEPUIS VOTRE** station. **Ne pas utiliser une règle qui détecte un string ou du contenu**.
 
 **Question 8: Quelle est votre règle ? Où le message a-t'il été journalisé ? Qu'est-ce qui a été journalisé ?**
 
 ---
 
-**Reponse :**  
+**Réponse :**  
+
+```bash
+log tcp 192.168.1.39 any -> 91.198.174.192 any (msg:"Connexion a wikipedia"; sid:4000001; rev:1)
+```
+
+Le message a été journalisé dans `/var/log/snort` sous un format lisible par _tcpdump_ ou _wireshark_ mais pas dans le fichier _alert_.
+
+![q8-connectionWiki](images/q8-connectionWiki.PNG)
 
 ---
 
 --
 
-### Detecter un ping d'un autre système
+### Détecter un ping d'un autre système
 
 Ecrire une règle qui alerte à chaque fois que votre système reçoit un ping depuis une autre machine (je sais que la situation actuelle du Covid-19 ne vous permet pas de vous mettre ensemble... utilisez votre imagination pour trouver la solution à cette question !). Assurez-vous que **ça n'alerte pas** quand c'est vous qui envoyez le ping vers un autre système !
 
@@ -481,7 +489,7 @@ Lancer Wireshark et faire une capture du trafic sur l'interface connectée au br
 
 ---
 
-**Reponse :**  
+**Reponse :**  L'option -r de Snort permet de lire des fichiers format pcap ou log.
 
 ---
 
