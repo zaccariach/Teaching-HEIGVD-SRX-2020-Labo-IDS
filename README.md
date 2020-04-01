@@ -515,7 +515,13 @@ Utiliser l'option correcte de Snort pour analyser le fichier de capture Wireshar
 
 ---
 
-**Reponse :**  
+**Réponse :**  Oui il y a une différence. Lorsqu'on capture en temps réel sur Snort, il y a beaucoup plus d'informations : ***Actions Stats / Limits / Verdicts*** (avec leur % respectifs en fonction de la totalité capturée) sont des informations présentes uniquement lors de la capture en temps réel.
+
+![q17-snortRealTime](images/q17-snortRealTime.PNG)
+
+Lors de la capture avec Wireshark, uniquement le _**Breakdown by protocol**_ est présent (présent aussi lors de la capture en temps réel).
+
+![q17-snortWireshark](images/q17-snortWireshark.PNG)
 
 ---
 
@@ -523,7 +529,7 @@ Utiliser l'option correcte de Snort pour analyser le fichier de capture Wireshar
 
 ---
 
-**Reponse :**  
+**Réponse :**  Non, aucune alerte n'est enregistrée. Ces dernières sont uniquement effectuées lorsqu'on capture en temps réel.
 
 ---
 
