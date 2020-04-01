@@ -1,4 +1,4 @@
-# Teaching-HEIGVD-SRX-2020-Laboratoire-IDS
+# -Teaching-HEIGVD-SRX-2020-Laboratoire-IDS
 
 **Ce travail de laboratoire est à faire en équipes de 2 personnes** (oui... en remote...). Je vous laisse vous débrouiller ;-)
 
@@ -410,25 +410,27 @@ Ecrire une règle qui alerte à chaque fois que votre système reçoit un ping d
 
 ---
 
-**Reponse :**  
+**Réponse :**  
+
+```bash
+alert icmp any any -> 192.168.1.39 any (itype:8; msg:"Ping sur ma machine"; sid:21; rev:1)
+```
 
 ---
-
 
 **Question 10: Comment avez-vous fait pour que ça identifie seulement les pings entrants ?**
 
 ---
 
-**Reponse :**  
+**Réponse :**  Pour alerter uniquement les pings entrants, nous avons mentionné dans la règle que c’est les pings de n’importe quel machine et n'importe quel port (any any) vers notre machine (192.168.1.39) sur n’importe quel port. Le sens "extérieur vers hôte" se fait via la flèche `->`.
 
 ---
-
 
 **Question 11: Où le message a-t-il été journalisé ?**
 
 ---
 
-**Reponse :**  
+**Réponse :**  Les alertes sont journalisées dans le fichier d’alerte dans: `/var/log/snort/alert`. 
 
 ---
 
@@ -437,13 +439,15 @@ Ecrire une règle qui alerte à chaque fois que votre système reçoit un ping d
 
 ---
 
-**Reponse :**  
+**Réponse :**  
+
+![q12-pingOnMyPC](images/q12-pingOnMyPC.PNG)
 
 ---
 
 --
 
-### Detecter les ping dans les deux sens
+### Détecter les ping dans les deux sens
 
 Modifier votre règle pour que les pings soient détectés dans les deux sens.
 
@@ -451,22 +455,32 @@ Modifier votre règle pour que les pings soient détectés dans les deux sens.
 
 ---
 
-**Reponse :**  
+**Réponse :**  Il suffit simplement de modifier "_l'opérateur de direction_" de `->` à `<>` : le trafic est alors capturé dans les 2 sens.
+
+```bash
+alert icmp any any <> 192.168.1.39 any (itype:8; msg:"Ping sur ma machine"; sid:21; rev:1)
+```
 
 ---
 
 
 --
 
-### Detecter une tentative de login SSH
+### Détecter une tentative de login SSH
 
-Essayer d'écrire une règle qui Alerte qu'une tentative de session SSH a été faite depuis la machine d'un voisin (je sais que la situation actuelle du Covid-19 ne vous permet pas de vous mettre ensemble... utilisez votre imagination pour trouver la solution à cette question !). Si vous avez besoin de plus d'information sur ce qui décrit cette tentative (adresses, ports, protocoles), servez-vous de Wireshark pour analyser les échanges lors de la requête de connexion depuis votre voisi.
+Essayer d'écrire une règle qui Alerte qu'une tentative de session SSH a été faite depuis la machine d'un voisin (je sais que la situation actuelle du Covid-19 ne vous permet pas de vous mettre ensemble... utilisez votre imagination pour trouver la solution à cette question !). Si vous avez besoin de plus d'information sur ce qui décrit cette tentative (adresses, ports, protocoles), servez-vous de Wireshark pour analyser les échanges lors de la requête de connexion depuis votre voisin.
 
 **Question 14: Quelle est votre règle ? Montrer la règle et expliquer en détail comment elle fonctionne.**
 
 ---
 
-**Reponse :**  
+**Réponse :**  
+
+```bash
+alert tcp any any -> 192.168.1.39 22 (msg:"Tentative connexion SSH"; sid:4000003; rev:1;)
+```
+
+Cette règle permet de créer une alerte lorsque n'importe quelle machine depuis n'importe quel port (any any) essaie d'accéder à notre machine en _ssh_ (ip 192.168.1.39, port 22). Une entrée est enregistrée dans le fichier `/var/log/snort/alert` à chaque essai de connexion _ssh_ avec comme tag "Tentative connexion SSH", sid:4000003 et rev:1 .
 
 ---
 
@@ -475,7 +489,9 @@ Essayer d'écrire une règle qui Alerte qu'une tentative de session SSH a été 
 
 ---
 
-**Reponse :**  
+**Réponse :**  
+
+![q15-tryCoSSH](images/q15-tryCoSSH.PNG)
 
 ---
 
