@@ -579,7 +579,7 @@ Pour fragtest, on spécifie uniquement le type de test sur un hôte.
 
 **Reponse :**  Frag3 est un défragmenteur de paquet IP sur une cible. Ce préprocesseur permet d'éviter à un attaquant d'utiliser la méthode de fragmentation de paquets IP comme fragroute et ainsi passer entre les mailles du filet de l'IDS.
 
-Frag3 va COMPLETER
+Grâce à l'hôte cible donné à l'IDS, ce dernier va checker les paquets reçus par l'hôte et voir si des attaques comme `fragroute` sont exécutées sur la cible.
 
 ---
 
@@ -590,7 +590,9 @@ Reprendre l'exercice de la partie [Trouver votre nom](#trouver-votre-nom-). Essa
 
 ---
 
-**Reponse :**  
+**Reponse :**  `fragroute` ne semble pas fonctionner pour nous car le fichier `alert` contient des entrées de paquets contenant le contenu recherché. 
+
+Normalement si la configuration des options fragroute est faite correctement et que Snort est désactivé/downgradé Snort pour être plus laxiste sur la détection des paquets, on devrait avoir une baisse voire une disparition totale des alertes de Snort.
 
 ---
 
@@ -601,7 +603,11 @@ Modifier le fichier `myrules.rules` pour que snort utiliser le `Frag3 Preprocess
 
 ---
 
-**Reponse :**  
+**Reponse :**  Là encore nous avons eu des soucis pour fragroute et Snort et donc nous n'avons pas pu obtenir les résultats espérés suivant:
+
+`fragroute` passe au travers de la détection de Snort, et ceux même avec Frag2. C'est pourquoi Snort s'est doté de la nouvelle version `Frag3` qui permet de détecter la fragmentation de paquets de `fragroute` et d'en avertir le client.
+
+On devrait alors recevoir les alertes qui avaient passé les mailles du filet de Snort précédemment.
 
 ---
 
