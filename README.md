@@ -611,11 +611,12 @@ On devrait alors recevoir les alertes qui avaient passé les mailles du filet de
 
 ---
 
+
 **Question 25: A quoi sert le `SSL/TLS Preprocessor` ?**
 
 ---
 
-**Reponse :**  
+**Réponse :**  Permet dans des paquets SSL/TLS d'analyser des parties non-chiffrées.
 
 ---
 
@@ -623,17 +624,20 @@ On devrait alors recevoir les alertes qui avaient passé les mailles du filet de
 
 ---
 
-**Reponse :**  
+**Réponse :**  Permet le filtrage de toute données sensibles (no. de cartes, noms, adresses e-mail, ....)
 
 ---
 
 ### Conclusions
 
+
 **Question 27: Donnez-nous vos conclusions et votre opinion à propos de snort**
 
 ---
 
-**Reponse :**  
+**Réponse :**  Logiciel complet proposant une multitude de possibilités. Bien évidemment, afin de prendre en main le logiciel correctement, il est nécessaire de passer quelques heures dessus.
+
+Nous avons des difficultés lors de ce laboratoire à faire fonctionner _Fragroute_ (et non _Fragrouter_) car nous avions toujours des alertes avec _Snort_: nous n'avons donc pas pu obtenir tous les résultats (même si nous les avons imaginés et expliqués) Nous ne savons pas actuellement d'où pourrait venir le problème.
 
 ---
 
