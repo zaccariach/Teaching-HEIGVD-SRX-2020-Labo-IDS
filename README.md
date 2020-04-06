@@ -286,7 +286,7 @@ Vous pouvez aussi utiliser des captures Wireshark ou des fichiers snort.log.xxxx
 
 ---
 
-**Reponse :**  
+**Reponse :**  Cela permet d'utiliser des plugins externes et de les lancer dans Snort. Ces plugins vont par exemple examiner des paquets ou les modifier pour pouvoir mieux les interpréter. Ou bien ils peuvent modifier le traffic des paquets afin de capturer des attaques cachés de Snort.
 
 ---
 
@@ -294,7 +294,7 @@ Vous pouvez aussi utiliser des captures Wireshark ou des fichiers snort.log.xxxx
 
 ---
 
-**Reponse :**  
+**Reponse :**  Snort tente de lancer des préprocesseurs pour nos règles mais ne trouve pas de "plugins" à lancer. Ce message n'étant qu'un warning, on peut l'ignorer simplement, sauf dans le cas où nous souhaitons utiliser un préprocesseur spécifique.
 
 ---
 
@@ -310,7 +310,7 @@ alert tcp any any -> any any (msg:"Mon nom!"; content:"Rubinstein"; sid:4000015;
 
 ---
 
-**Reponse :**  
+**Reponse :**  Cela va écrire un message dans le fichier `alert` à chaque paquet TCP reçu depuis n'importe qui, par n'importe quel port, vers n'importe qui et vers n'importe quel port. Le message sera "Mon nom!" à chaque fois qu'un paquet TCP contient le contenu "Rubinstein".
 
 ---
 
@@ -326,15 +326,25 @@ sudo snort -c myrules.rules -i eth0
 
 **Reponse :**  
 
+![questions4_1](images/questions4_1.PNG)![questions4_2](images/questions4_2.PNG)
+
+Les 3 premières ligne indiquent que Snort initialise les différents plugins et préprocesseurs que va utiliser notre règle.
+
+Ensuite, Snort va "parser" la règle pour en extraire et traiter les options demandées par la règle. Il indique ensuite où se trouve les logs qui vont être produit par cette règle.
+
+Puis, des informations concernant la règle sont affichées (comme combien de règles sont inscrites dans le fichier, quel type de paquet va être monitoré par Snort, sur quelle interface, etc.)
+
+Enfin, Snort avertit l'utilisateur que le processus de sniffage est actif.
+
 ---
 
-Aller à un site web contenant dans son text votre nom ou votre mot clé que vous avez choisi (il faudra chercher un peu pour trouver un site en http...).
+Aller à un site web contenant dans son texte votre nom ou votre mot clé que vous avez choisi (il faudra chercher un peu pour trouver un site en http...).
 
 **Question 5: Que voyez-vous sur votre terminal quand vous visitez le site ?**
 
 ---
 
-**Reponse :**  
+**Reponse :**  Sur le terminal lui-même (celui qui a lancé Snort avec notre règle), rien n'est apparu.
 
 ---
 
@@ -346,6 +356,16 @@ Arrêter Snort avec `CTRL-C`.
 
 **Reponse :**  
 
+Snort nous donne les informations suivantes:
+
+- Le temps total que Snort a sniffé des paquets
+- Nombre de paquets traités par secondes et par minutes
+- Nombre de paquets reçus et traités par Snort
+- Liste des différents protocoles que Snort peut reconnaître (avec le nombre de paquets qui sont attribués à ces protocoles)
+- Liste du nombre d'actions prises par Snort concernant les paquets reçus (par exemple: écriture dans le fichier alert, log de certains paquets), des limites qui ont été franchi durant le processus de sniffing (limite de log, limite d'évènement, limite d'alerte), et des verdicts attribués pour chaque paquet (paquets acceptés ou rejetés, ignoré, whitelisté ou blacklisté)
+
+![question6_1](images/question6_1.PNG)![question6_2](images/question6_2.PNG)
+
 ---
 
 
@@ -355,7 +375,11 @@ Aller au répertoire /var/log/snort. Ouvrir le fichier `alert`. Vérifier qu'il 
 
 ---
 
-**Reponse :**  
+**Reponse :**  Snort affiche en premier lieu le type de paquet récupéré avec son sid et le message associé (ici sid = 4000015 et le message "Mon nom!"). Ensuite, on obtient la priorité du paquet traité.
+
+La date et l'heure de reçu du paquet sont données, l'adresse IP (IPv4 ou IPv6) de la destination et de la source, les ports, le type de paquet (TCP, UCP, ICMP), le Time-To-Live du paquet, quelques en-têtes IP du paquets (TOS, ID, IpLen ou longueur de l'entête IP, DgmLen ou la longueur du datagram), et enfin les en-têtes TCP du paquet (Seq ou séquence de nombre TCP, Ack ou le champ ack de TCP (NMAP), Win ou (probablement) la longueur de la fenêtre TCP , TcpLen ou la longueur de l'en-tête TCP)
+
+![question5_alert](images/question5_alert.PNG)
 
 ---
 
@@ -372,6 +396,16 @@ Ecrire une règle qui journalise (sans alerter) un message à chaque fois que Wi
 
 **Reponse :**  
 
+```bash
+log tcp 192.168.1.21 any -> 91.198.174.192 any (msg"Connected to Wikipedia"; sid:4000001; rev:1;)
+```
+
+Pour notre règle, le message est journalisé dans le dossier /var/log/snort .
+
+Concernant son contenu, le log contient tous les paquets échangés durant la période de sniffing qui entre dans la règle imposé (ici, les paquets de notre hôte à Wikipedia).
+
+![question8](images/question8.PNG)
+
 ---
 
 --
@@ -384,16 +418,19 @@ Ecrire une règle qui alerte à chaque fois que votre système reçoit un ping d
 
 ---
 
-**Reponse :**  
+**Reponse :** 
+
+```bash
+alert icmp !192.168.1.20 any -> 192.168.1.20 any (itype:8; msg:"Ping from outside to host"; sid:4000005; rev:1;)
+```
 
 ---
-
 
 **Question 10: Comment avez-vous fait pour que ça identifie seulement les pings entrants ?**
 
 ---
 
-**Reponse :**  
+**Reponse :**  La règle s'applique uniquement sur les pings de l'extérieur vers l'hôte. De plus, on spécifie que seul les pings echo-request (type 8 d'ICMP) sont flagés et alertés.
 
 ---
 
@@ -402,7 +439,7 @@ Ecrire une règle qui alerte à chaque fois que votre système reçoit un ping d
 
 ---
 
-**Reponse :**  
+**Reponse :**  Dans le fichier alert dans /var/log/snort
 
 ---
 
@@ -411,7 +448,13 @@ Ecrire une règle qui alerte à chaque fois que votre système reçoit un ping d
 
 ---
 
-**Reponse :**  
+**Reponse :**  Les paquets qui entrent dans la règle appliquée, c'est-à-dire un ping (echo-request) venant d'une autre machine sur notre hôte
+
+![question12](images/question12.PNG)
+
+Dans le fichier alert, on obtient ceci:
+
+![question12_2](images/question12_2.PNG)
 
 ---
 
@@ -425,10 +468,13 @@ Modifier votre règle pour que les pings soient détectés dans les deux sens.
 
 ---
 
-**Reponse :**  
+**Reponse :**  On modifie l'opérateur de direction des paquets de `->` à `<>`. Ainsi, le trafic des deux sens est capturé.
+
+```
+alert icmp !192.168.1.20 any <> 192.168.1.20 any (itype:8; msg:"Ping from outside to host"; sid:4000005; rev:1;)
+```
 
 ---
-
 
 --
 
@@ -442,14 +488,21 @@ Essayer d'écrire une règle qui Alerte qu'une tentative de session SSH a été 
 
 **Reponse :**  
 
----
+```bash
+alert tcp !192.168.1.20 22 -> 192.168.1.20 22 (msg:"Attempt of SSH connection to Host"; sid:4000007; rev:1;)
+```
 
+Notre règle va écrire une alerte dans le fichier alert lorsqu'une machine distante va faire une tentative de connexion SSH sur notre hôte via le port 22 TCP.
+
+---
 
 **Question 15: Montrer le message d'alerte enregistré dans le fichier d'alertes.** 
 
 ---
 
 **Reponse :**  
+
+![question15](images/question15.PNG)
 
 ---
 
@@ -463,7 +516,7 @@ Lancer Wireshark et faire une capture du trafic sur l'interface connectée au br
 
 ---
 
-**Reponse :**  
+**Reponse :**  L'option -r de Snort permet de lire des fichiers format pcap ou log.
 
 ---
 
@@ -473,7 +526,17 @@ Utiliser l'option correcte de Snort pour analyser le fichier de capture Wireshar
 
 ---
 
-**Reponse :**  
+**Reponse :**  Il affiche les paquets enregistrés par Wireshark lors de sa capture, 
+
+![question17_1](images/question17_1.PNG)
+
+ainsi que les statistiques liées aux paquets tel que le pourcentage de paquets d'un certain protocole, le nombre de paquets analysés, reçu ou jeté, et le temps que cela a prit.
+
+![question17_2](images/question17_2.PNG)
+
+L'analyse en temps réel de Snort ne va pas listé les paquets capturés (ceux-ci sont disponibles dans les logs) mais va ajouter une section spécial pour lui-même contenant des statistiques liés aux opérations effectuées par Snort sur ces paquets.
+
+![question17_3](images/question17_3.PNG)
 
 ---
 
@@ -481,7 +544,7 @@ Utiliser l'option correcte de Snort pour analyser le fichier de capture Wireshar
 
 ---
 
-**Reponse :**  
+**Reponse :**  Non car c'est Snort, lors d'une capture en temps réel, qui écrit dans ce fichier lorsqu'une règle en `alert` est active. Wireshark n'écrit pas dans ce fichier lui-même.
 
 ---
 
@@ -495,16 +558,17 @@ Faire des recherches à propos des outils `fragroute` et `fragtest`.
 
 ---
 
-**Reponse :**  
+**Reponse :**  Ce sont des outils de pentest. fragroute permet de manipuler des paquets en les interceptant, en les modifiants et en les réécrivant pour un hôte spécifique (fragmentation de paquets pour éviter la détection d'IDS/IPS). fragtest permet de tester la couche IP d'un hôte et voir s'il est actif et attaquable.
 
 ---
-
 
 **Question 21: Quel est le principe de fonctionnement ?**
 
 ---
 
-**Reponse :**  
+**Reponse :**  Pour fragroute, on va spécifier un fichier contenant des commandes à effectuer sur des paquets à destination d'une adresse IP.
+
+Pour fragtest, on spécifie uniquement le type de test sur un hôte.
 
 ---
 
@@ -513,34 +577,39 @@ Faire des recherches à propos des outils `fragroute` et `fragtest`.
 
 ---
 
-**Reponse :**  
+**Reponse :**  Frag3 est un défragmenteur de paquet IP sur une cible. Ce préprocesseur permet d'éviter à un attaquant d'utiliser la méthode de fragmentation de paquets IP comme fragroute et ainsi passer entre les mailles du filet de l'IDS.
+
+Grâce à l'hôte cible donné à l'IDS, ce dernier va checker les paquets reçus par l'hôte et voir si des attaques comme `fragroute` sont exécutées sur la cible.
 
 ---
 
 
 Reprendre l'exercice de la partie [Trouver votre nom](#trouver-votre-nom-). Essayer d'offusquer la détection avec `fragroute`.
 
-
 **Question 23: Quel est le résultat de votre tentative ?**
 
 ---
 
-**Reponse :**  
+**Reponse :**  `fragroute` ne semble pas fonctionner pour nous car le fichier `alert` contient des entrées de paquets contenant le contenu recherché. 
+
+Normalement si la configuration des options fragroute est faite correctement et que Snort est désactivé/downgradé Snort pour être plus laxiste sur la détection des paquets, on devrait avoir une baisse voire une disparition totale des alertes de Snort.
 
 ---
 
 
 Modifier le fichier `myrules.rules` pour que snort utiliser le `Frag3 Preprocessor` et refaire la tentative.
 
-
 **Question 24: Quel est le résultat ?**
 
 ---
 
-**Reponse :**  
+**Reponse :**  Là encore nous avons eu des soucis pour fragroute et Snort et donc nous n'avons pas pu obtenir les résultats espérés suivant:
+
+`fragroute` passe au travers de la détection de Snort, et ceux même avec Frag2. C'est pourquoi Snort s'est doté de la nouvelle version `Frag3` qui permet de détecter la fragmentation de paquets de `fragroute` et d'en avertir le client.
+
+On devrait alors recevoir les alertes qui avaient passé les mailles du filet de Snort précédemment.
 
 ---
-
 
 **Question 25: A quoi sert le `SSL/TLS Preprocessor` ?**
 
@@ -549,7 +618,6 @@ Modifier le fichier `myrules.rules` pour que snort utiliser le `Frag3 Preprocess
 **Reponse :**  
 
 ---
-
 
 **Question 26: A quoi sert le `Sensitive Data Preprocessor` ?**
 
@@ -561,7 +629,6 @@ Modifier le fichier `myrules.rules` pour que snort utiliser le `Frag3 Preprocess
 
 ### Conclusions
 
-
 **Question 27: Donnez-nous vos conclusions et votre opinion à propos de snort**
 
 ---
@@ -569,6 +636,5 @@ Modifier le fichier `myrules.rules` pour que snort utiliser le `Frag3 Preprocess
 **Reponse :**  
 
 ---
-
 
 <sub>This guide draws heavily on http://cs.mvnu.edu/twiki/bin/view/Main/CisLab82014</sub>
