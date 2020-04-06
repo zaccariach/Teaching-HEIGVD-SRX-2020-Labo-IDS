@@ -594,16 +594,15 @@ Modifier le fichier `myrules.rules` pour que snort utiliser le `Frag3 Preprocess
 
 ---
 
-**Reponse :**  
+**Réponse :**  Permet dans des paquets SSL/TLS d'analyser des parties non-chiffrées.
 
 ---
-
 
 **Question 26: A quoi sert le `Sensitive Data Preprocessor` ?**
 
 ---
 
-**Reponse :**  
+**Réponse :**  Permet le filtrage de toute données sensibles (no. de cartes, noms, adresses e-mail, ....)
 
 ---
 
@@ -614,7 +613,9 @@ Modifier le fichier `myrules.rules` pour que snort utiliser le `Frag3 Preprocess
 
 ---
 
-**Reponse :**  
+**Réponse :**  Logiciel complet proposant une multitude de possibilités. Bien évidemment, afin de prendre en main le logiciel correctement, il est nécessaire de passer quelques heures dessus.
+
+Nous avons des difficultés lors de ce laboratoire à faire fonctionner _Fragroute_ (et non _Fragrouter_) car nous avions toujours des alertes avec _Snort_. Nous ne savons pas actuellement d'où pourrait venir le problème.
 
 ---
 
