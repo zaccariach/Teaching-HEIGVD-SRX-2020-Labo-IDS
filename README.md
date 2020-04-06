@@ -1,5 +1,7 @@
 # Teaching-HEIGVD-SRX-2020-Laboratoire-IDS
 
+Auteurs : Michaël Da Silva et Christian Zaccaria
+
 **Ce travail de laboratoire est à faire en équipes de 2 personnes** (oui... en remote...). Je vous laisse vous débrouiller ;-)
 
 **ATTENTION : Commencez par créer un Fork de ce repo et travaillez sur votre fork.**
